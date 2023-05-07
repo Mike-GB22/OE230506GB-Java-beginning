@@ -43,6 +43,9 @@ public static String inputStringFromConsole(String prompt){
         System.out.println("\n"+task+": ");
         System.out.println(result);
     }
+    public static void printResults(String result){
+        System.out.println(result);
+    }
 
     // ----------    Поиск элемента массива, вывод текстового ответа
     public static String findeAntwort(int[] myArray){
