@@ -1,42 +1,69 @@
-// ----------    Вывод массива
-public static String intArrayToString(int[] myArray){
-    String text = "[";
-    String separator = ",";
-    for (int i = 0; i < myArray.length; i++){
-        text += " " + myArray[i];
-        if(i < myArray.length - 1) text += separator;
+    // ----------    Вывод массива
+    public static String intArrayToString(int[] myArray){
+        String text = "[";
+        String separator = ",";
+        for (int i = 0; i < myArray.length; i++){
+            text += " " + myArray[i];
+            if(i < myArray.length - 1) text += separator;
+        }
+        text += "]";
+        return text;
     }
-    text += "]";
-    return text;
-}
 
-public static String intArrayToString(int[] myArray, String promt){
-    String text = promt+":\n";
-    text += intArrayToString(myArray);
-    return text;
-}
+    public static String intArrayToString(int[] myArray, String promt){
+        String text = promt+":\n";
+        text += intArrayToString(myArray);
+        return text;
+    }
 
-// ----------    Считываем из консоли одно значение
-//Считываем int число из консоли
-public static int inputIntFromConsole(String prompt){
-    return Integer.parseInt(inputStringFromConsole(prompt));
-}
+    // ----------    Считываем из консоли одно значение
+    //Cчитываем int число из консоли в диапазоне
+    public static int inputIntFromConsoleInDiapason(String prompt, int min, int max){
+        int result = Integer.MIN_VALUE;
+        String attention = " [в диапазоне от "+ min +" до "+ max +"]";
+        String attentionFlag = "";
 
-//Считываем double число из консоли
-public static double inputDoubleFromConsole(String prompt){
-    return Double.parseDouble(inputStringFromConsole(prompt));
-}
+        while (true){
+            result = inputIntFromConsole(prompt+attentionFlag);
+            if(result >= min && result <= max) return result;
+            attentionFlag = attention;
+        }
+    }
 
-//Считываем строку из консоли
-public static String inputStringFromConsole(String prompt){
-    System.out.print(prompt+": ");
-    Scanner scan = new Scanner(System.in);
-    String text = scan.nextLine();
-    //scan.close();
+    //Считываем int число из консоли
+    public static int inputIntFromConsole(String prompt){
+        return Integer.parseInt(inputStringFromConsole(prompt));
+    }
 
-    return text;
-}
-// ----------
+    //Считываем double число из консоли
+    public static double inputDoubleFromConsole(String prompt){
+        return Double.parseDouble(inputStringFromConsole(prompt));
+    }
+
+    //Считываем строку из консоли, но хотя бы минимум X символ!
+    public static String inputStringMinXSymbolsFromConsole(String prompt, int min){
+        String attention = " [миниумм "+ min +" символов]";
+        int count = 0;
+
+        String string = "";
+        while (string.length() < min){
+            string = inputStringFromConsole(prompt);
+            count ++;
+            if(count == 1){prompt += attention;}
+        }
+        return string;
+    }
+
+    //Считываем строку из консоли
+    public static String inputStringFromConsole(String prompt){
+        System.out.print(prompt+": ");
+        Scanner scan = new Scanner(System.in);
+        String text = scan.nextLine();
+        //scan.close();
+
+        return text;
+    }
+    // ----------
 
     //Вывод результата
     public static void printResults(String task, String result){
@@ -57,5 +84,80 @@ public static String inputStringFromConsole(String prompt){
     public static int findeIndex(int[] myArray){
         return -1;
     }
+    
+    //Сжатие текста до символ х повтор (число от 1 до 9, где 0, это 10)
+    public static String compressString(String origin){
+        StringBuilder result = new StringBuilder();
+        for (int i = 0; i < origin.length(); i++) {
+            char currentChar = origin.charAt(i);
+            int count = 1;
+
+            for (int j = i + 1; j < origin.length(); j++) {
+                if(currentChar == origin.charAt(j)) count++;
+                else break;
+                if(count>9) break; 
+            }
+            i += count -1; // переставляем указатель на символ последний который мы проверили.
+            result.append(currentChar);
+            if(count == 10) count = 0;
+            result.append(count);
+        }
+        return result.toString();
+
+    //Запись данных в новый файл
+    public static boolean writeToNewFile(String fileName, String string){
+        try (FileWriter writer = new FileWriter(fileName)){
+            writer.append(string);
+        } catch (IOException ex){
+            System.out.println("Ошибка работы с файлом: " + fileName + "\n" + ex.getMessage());
+            return false;
+        }
+        return true;
+    }
+    
+    //Извлекаем расширение из объекта Файл
+    public static String getExtOfFileName (File file){
+        String fileName = file.getName();
+        int index = fileName.lastIndexOf(".");
+            if(index <0) return "";
+        return fileName.substring(index +1);
+        // file.length() - размер файла
+        // File[] files = new File(String pathName).listFiles(); - список файлов по данному пути
+    }
+
+    //Сортировка пузырьком, по возрастанию
+    public static int[] sortIntArray (int[] array){
+        System.out.println("Imeem array:" + Arrays.toString(array));
+            int arrayLengthToSort = array.length;
+            for(int i = 0; i < arrayLengthToSort; i++){
+                for(int j = 1; j < arrayLengthToSort - i; j++){
+                    if(array[j-1] > array[j]){
+                        int tmp = array[j];
+                        array[j] = array[j-1];
+                        array[j-1] = tmp;
+                    }    
+                }
+            System.out.println("After [" + i + "] :" + Arrays.toString(array));    
+            }
+    
+            return array;
+    }
+
+    //Читаем Весь файл в строку
+    public static String readStringsFromFile(String fileName){
+        String strings = new String();
+        try(BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
+            String line;
+            while((line = reader.readLine()) != null){
+                strings += line;
+                strings += "\n";
+            }
+        } catch (Exception ex) {
+            System.out.println("Вылетела какая то ошибка, при чтении файла: " + fileName);
+            System.out.println(ex.getMessage());
+        }
+        return strings;
+    }
+    
     
     

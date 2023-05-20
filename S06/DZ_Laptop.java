@@ -1,3 +1,4 @@
+//2023/05/19 mip
 package S06;
 
 import java.util.Map;
