@@ -11,6 +11,8 @@ public class DZ3_PostfixCalc {
             Пользователь вводит данные и операции в обратной польской записи.
             Калькулятор вычисляет результат и проверяет, что в стэке получилось единственное число.
             Например:        5 4 3 − +       =>     5 1 +     =>      6
+            
+            http://primat.org/news/obratnaja_polskaja_zapis/2016-04-09-1181
             """;
 
     private static Stack<Double> stackToCalc = new Stack<>();
